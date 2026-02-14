@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抽取你的新年心灵盲盒</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 抽签页面 -->
+    <div id="draw-page" class="page">
+        <div id="snow-container" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 100;"></div>
+        <h1>抽取你的新年心灵盲盒</h1>
+        <div class="carousel-container">
+            <div id="carousel" class="carousel">
+                <!-- 旋转木马内容将由JS生成 -->
+            </div>
+        </div>
+        <button id="draw-btn" class="draw-btn">开始抽签</button>
+    </div>
+
+    <style>
+    /* 雪花动画 */
+    @keyframes fall {
+        0% {
+            transform: translateY(-20px) rotate(0deg);
+            opacity: 0.5;
+        }
+        100% {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+    </style>
+
+    <script>
+    // 为index页面创建雪花
+    window.onload = function() {
+        // 创建雪花
+        const snowContainer = document.getElementById('snow-container');
+        if (snowContainer) {
+            for (let i = 0; i < 50; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.style.position = 'absolute';
+                snowflake.style.width = (Math.random() * 10 + 5) + 'px';
+                snowflake.style.height = snowflake.style.width;
+                snowflake.style.backgroundColor = '#ffffff';
+                snowflake.style.borderRadius = '50%';
+                snowflake.style.opacity = '0.9';
+                snowflake.style.left = (Math.random() * 100) + '%';
+                // 随机位置，不只是从顶部开始
+                snowflake.style.top = (Math.random() * 100) + '%';
+                snowflake.style.boxShadow = '0 0 10px #ffffff';
+                snowflake.style.animation = 'fall ' + (Math.random() * 5 + 5) + 's linear infinite';
+                snowflake.style.animationDelay = '0s';
+                snowflake.style.zIndex = '10';
+                snowContainer.appendChild(snowflake);
+            }
+        }
+    };
+    </script>
+    
+
+
+    <!-- 结果页面 -->
+    <div id="result-page" class="page hidden">
+        <div class="result-container">
+            <h2 id="hexagram-name"></h2>
+            <div id="hexagram-explanation"></div>
+            <button id="reset-btn" class="reset-btn">重新抽签</button>
+        </div>
+        <div id="petals-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

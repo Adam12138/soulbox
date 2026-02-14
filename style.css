@@ -1,0 +1,268 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #FEE3EC 0%, #F2E6F0 50%, #B1BEF2 100%);
+    overflow: hidden;
+}
+
+.page {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s ease;
+    position: relative;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* 抽签页面样式 */
+#draw-page h1 {
+    font-size: 32px;
+    color: #000;
+    margin-bottom: 60px;
+    text-shadow: 3px 3px 6px rgba(254, 227, 236, 0.3);
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* 结果页面标题样式 */
+#hexagram-name {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+}
+
+/* 背景图片旋转木马容器 */
+.carousel-container {
+    width: 400px;
+    height: 400px;
+    margin-bottom: 40px;
+    position: relative;
+    perspective: 1000px;
+    overflow: visible;
+    /* 背景图片效果 */
+    background: url('backgroud.jpg') center/cover no-repeat;
+    border-radius: 25px;
+    /* 边缘效果 */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.carousel {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+/* 玻璃拟态图片项 */
+.carousel-item {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    background: transparent;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    opacity: 1;
+    transform-style: preserve-3d;
+    backface-visibility: visible;
+    transition: all 0.3s ease;
+}
+
+.carousel-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(254, 227, 236, 0.2);
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    max-width: 75px;
+    max-height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: none;
+    outline: none;
+}
+
+/* 玻璃拟态抽签按钮 */
+.draw-btn {
+    padding: 16px 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    /* 玻璃拟态效果 */
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(177, 190, 242, 0.5);
+    border-radius: 35px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(177, 190, 242, 0.2);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.draw-btn:hover {
+    box-shadow: 0 8px 20px rgba(177, 190, 242, 0.3);
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.draw-btn:active {
+    box-shadow: 0 2px 8px rgba(177, 190, 242, 0.2);
+    transform: translateY(0);
+}
+
+.draw-btn:disabled {
+    background: rgba(255, 255, 255, 0.2);
+    cursor: not-allowed;
+    box-shadow: 0 2px 8px rgba(177, 190, 242, 0.1);
+    color: rgba(51, 51, 51, 0.6);
+    border-color: rgba(177, 190, 242, 0.3);
+}
+
+/* 结果页面样式 */
+#result-page {
+    background: linear-gradient(135deg, #FEE3EC 0%, #F2E6F0 50%, #B1BEF2 100%);
+    position: relative;
+}
+
+/* 玻璃拟态结果容器 */
+.result-container {
+    width: 90%;
+    max-width: 500px;
+    /* 玻璃拟态效果 */
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(245, 196, 226, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(177, 190, 242, 0.2);
+    padding: 30px;
+    text-align: center;
+    z-index: 10;
+}
+
+#hexagram-explanation {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: left;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* 玻璃拟态重置按钮 */
+.reset-btn {
+    padding: 16px 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    /* 玻璃拟态效果 */
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(245, 196, 226, 0.5);
+    border-radius: 35px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(177, 190, 242, 0.2);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.reset-btn:hover {
+    box-shadow: 0 8px 20px rgba(177, 190, 242, 0.3);
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.reset-btn:active {
+    box-shadow: 0 2px 8px rgba(177, 190, 242, 0.2);
+    transform: translateY(0);
+}
+
+/* 玻璃拟态旋转木马顶部装饰 */
+.carousel-container::after {
+    content: "GOOD LUCK";
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    font-weight: bold;
+    color: #B1BEF2;
+    z-index: 11;
+    text-shadow: 1px 1px 2px rgba(177, 190, 242, 0.3);
+}
+
+/* 花瓣样式 */
+.petal {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #F4C9DA;
+    border-radius: 10px 0 10px 0;
+    opacity: 0.5;
+    animation: fall linear infinite;
+    z-index: 1;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* 雪花样式 */
+#snow-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 100;
+    display: block;
+    overflow: hidden;
+}
+
+.snowflake {
+    position: absolute;
+    background-color: #ffffff;
+    border-radius: 50%;
+    opacity: 1;
+    animation: snowfall linear infinite;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 1);
+    z-index: 1;
+}
+
+@keyframes snowfall {
+    0% {
+        transform: translateY(-20px) translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) translateX(50px);
+        opacity: 0;
+    }
+}
