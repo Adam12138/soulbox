@@ -86,7 +86,7 @@ const carouselImages = [
 
 // 初始化旋转木马
 function initCarousel() {
-    const itemCount = 12; // 旋转木马上的项目数量，减少为8个
+    const itemCount = 12; // 旋转木马上的项目数量
     const radius = 150; // 旋转木马半径，适当增大以容纳更大的图片
     
     for (let i = 0; i < itemCount; i++) {
@@ -109,6 +109,7 @@ function initCarousel() {
         item.style.height = '90px'; // 调大1.5倍
         item.style.transform = `translateX(${x}px) translateY(${y}px) translateZ(${z}px)`;
         item.style.zIndex = Math.floor(z + radius); // 根据z轴位置设置层级
+        item.style.transition = 'transform 0.05s ease-out'; // 设置平滑过渡
         
         // 创建图片元素
         const img = document.createElement('img');
@@ -141,10 +142,10 @@ drawBtn.addEventListener('click', () => {
     // 获取所有图片元素
     const items = carousel.querySelectorAll('.carousel-item');
     const itemCount = items.length;
-    const radius = 120;
+    const radius = 150; // 统一使用与初始化相同的半径
 
     // 3秒转两圈，更流畅的动画
-    const totalSteps = 48; // 增加步骤数量，使动画更流畅
+    const totalSteps = 96; // 增加步骤数量，使动画更流畅
     const totalRotation = 2; // 转两圈（4π）
     let currentStep = 0;
     const stepDuration = 3000 / totalSteps; // 总时间3秒，平均分配给每个步骤
@@ -158,9 +159,14 @@ drawBtn.addEventListener('click', () => {
             const z = Math.sin(angle) * radius;
             const y = (100 * z) / (2 * radius);
             
-            item.style.transition = 'transform 0.1s linear';
+            // 只在必要时更新z-index，减少重排
+            const newZIndex = Math.floor(z + radius);
+            if (parseInt(item.style.zIndex) !== newZIndex) {
+                item.style.zIndex = newZIndex;
+            }
+            
+            // 使用transform，不重复设置transition（已在初始化时设置）
             item.style.transform = `translateX(${x}px) translateY(${y}px) translateZ(${z}px)`;
-            item.style.zIndex = Math.floor(z + radius);
         });
 
         currentStep++;
@@ -205,7 +211,7 @@ drawBtn.addEventListener('click', () => {
         sentenceElement.style.marginBottom = '30px';
         
         const forwardBtn = document.createElement('button');
-        forwardBtn.textContent = '转发';
+        forwardBtn.textContent = '转发查看详细解读';
         forwardBtn.style.padding = '10px 30px';
         forwardBtn.style.fontSize = '16px';
         forwardBtn.style.backgroundColor = '#B1BEF2';
