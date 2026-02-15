@@ -255,14 +255,9 @@
             const canvas = document.getElementById('fortune-card');
             const ctx = canvas.getContext('2d');
             
-            // 优化canvas分辨率，解决模糊问题
-            const dpr = window.devicePixelRatio || 1;
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
-            canvas.style.width = rect.width + 'px';
-            canvas.style.height = rect.height + 'px';
-            ctx.scale(dpr, dpr);
+            // 重置canvas尺寸
+            canvas.width = 230;
+            canvas.height = 320;
             
             // 加载背景图片
             const img = new Image();
@@ -274,14 +269,14 @@
                 const imgWidth = img.width;
                 const imgHeight = img.height;
                 
+                // 裁剪掉图片底部的1/10
+                const keptHeight = imgHeight * 0.9;
+                
                 // 计算图片和canvas的宽高比
-                const imgRatio = imgWidth / imgHeight;
+                const imgRatio = imgWidth / keptHeight;
                 const canvasRatio = canvas.width / canvas.height;
                 
                 let cropWidth, cropHeight, cropX, cropY;
-                
-                // 裁剪掉图片底部的1/10
-                const keptHeight = imgHeight * 0.9;
                 
                 if (imgRatio > canvasRatio) {
                     // 图片比canvas更宽，裁剪中心高度
@@ -292,47 +287,39 @@
                 } else {
                     // 图片比canvas更高，裁剪中心宽度
                     cropWidth = imgWidth;
-                    cropHeight = Math.min(cropWidth / canvasRatio, keptHeight);
+                    cropHeight = keptHeight;
                     cropX = 0;
                     cropY = 0; // 从顶部开始裁剪，裁剪掉底部1/10
                 }
                 
-                // 设置图片绘制质量，解决模糊问题
+                // 设置图片绘制质量
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
-                ctx.antialias = 'subpixel';
                 
                 // 绘制裁剪后的背景图片，填满整个canvas
-                // 注意：由于我们已经缩放了canvas，这里需要使用缩放后的尺寸
-                const scaledWidth = rect.width;
-                const scaledHeight = rect.height;
                 ctx.drawImage(
                     img, 
                     cropX, cropY, cropWidth, cropHeight, // 源图像中心裁剪区域
-                    0, 0, scaledWidth, scaledHeight // 目标画布填满整个区域
+                    0, 0, canvas.width, canvas.height // 目标画布填满整个区域
                 );
                 
-                // 不添加遮罩，保持图片原始亮度和清晰度
-                
-                // 设置文字样式，减少阴影模糊，使文字更清晰
-                ctx.font = '18px "STKaiti", "KaiTi", serif'; // 减小字体大小
+                // 设置文字样式
+                ctx.font = '16px "STKaiti", "KaiTi", serif';
                 ctx.fillStyle = '#ffffff';
                 ctx.textAlign = 'center';
-                ctx.textBaseline = 'top'; // 顶部对齐
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-                ctx.shadowBlur = 2;
+                ctx.textBaseline = 'top';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+                ctx.shadowBlur = 3;
                 ctx.shadowOffsetX = 1;
                 ctx.shadowOffsetY = 1;
-                ctx.textRendering = 'optimizeLegibility';
                 
                 // 文字换行处理
-                const maxWidth = scaledWidth - 40; // 两边各留20px边距
-                const lineHeight = 30; // 减小行高
+                const maxWidth = canvas.width - 40; // 两边各留20px边距
+                const lineHeight = 25; // 行高
                 const lines = [];
                 let currentLine = "";
                 
-                // 分割文字为多行（考虑中文分词）
-                // 对于中文，按字符分割
+                // 分割文字为多行
                 const chars = sentence.split('');
                 for (const char of chars) {
                     const testLine = currentLine + char;
@@ -347,7 +334,7 @@
                 }
                 lines.push(currentLine);
                 
-                // 计算文字起始位置，置于顶部，留下20px margin
+                // 计算文字起始位置
                 const startY = 20; // 顶部20px margin
                 
                 // 绘制文字
