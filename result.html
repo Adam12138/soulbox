@@ -338,6 +338,10 @@
                 document.getElementById('card-preview').style.display = 'block';
                 // 隐藏生成心灵卡按钮
                 document.getElementById('generate-card-btn').style.display = 'none';
+                // 隐藏抽签结果相关内容
+                document.querySelector('.result-container h1').style.display = 'none';
+                document.getElementById('hexagram-name').style.display = 'none';
+                document.getElementById('hexagram-explanation').style.display = 'none';
             };
             
             img.onerror = function() {
