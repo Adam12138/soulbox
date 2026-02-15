@@ -138,7 +138,7 @@ drawBtn.addEventListener('click', () => {
     // 检查是否可以抽签（每60分钟一次）
     const lastDrawTime = localStorage.getItem('lastDrawTime');
     const currentTime = Date.now();
-    const sixtyMinutes = 60 * 60 * 1000;
+    const sixtyMinutes = 60 * 1000;
     
     if (lastDrawTime) {
         const timeDiff = currentTime - parseInt(lastDrawTime);
@@ -282,7 +282,7 @@ drawBtn.addEventListener('click', () => {
         modal.style.left = '0';
         modal.style.width = '100%';
         modal.style.height = '100%';
-        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        modal.style.backgroundColor = 'rgba(177, 190, 242, 0.7)';
         modal.style.display = 'flex';
         modal.style.justifyContent = 'center';
         modal.style.alignItems = 'center';
