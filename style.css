@@ -8,7 +8,7 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #FEE3EC 0%, #F2E6F0 50%, #B1BEF2 100%);
+    background: #b0221b;
     overflow: hidden;
 }
 
@@ -30,9 +30,9 @@ body {
 /* 抽签页面样式 */
 #draw-page h1 {
     font-size: 32px;
-    color: #000;
+    color: #FEF2DC;
     margin-bottom: 60px;
-    text-shadow: 3px 3px 6px rgba(254, 227, 236, 0.3);
+    text-shadow: 3px 3px 6px rgba(176, 34, 27, 0.3);
     font-weight: bold;
     letter-spacing: 2px;
 }
@@ -54,11 +54,11 @@ body {
     position: relative;
     perspective: 1000px;
     overflow: visible;
-    /* 背景图片效果 */
-    background: url('backgroud.jpg') center/cover no-repeat;
+    /* 背景颜色效果 */
+    background: #FEF2DC;
     border-radius: 25px;
-    /* 边缘效果 */
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    /* 增强阴影效果 */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .carousel {
@@ -106,35 +106,33 @@ body {
     padding: 16px 40px;
     font-size: 20px;
     font-weight: bold;
-    color: #333;
-    /* 玻璃拟态效果 */
-    background: rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(177, 190, 242, 0.5);
+    color: #b0221b;
+    background: #FEF2DC;
+    border: 1px solid #FEF2DC;
     border-radius: 35px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(177, 190, 242, 0.2);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 10px 20px rgba(254, 242, 220, 0.3), 0 4px 8px rgba(254, 242, 220, 0.2);
 }
 
 .draw-btn:hover {
-    box-shadow: 0 8px 20px rgba(177, 190, 242, 0.3);
+    box-shadow: 0 15px 25px rgba(254, 242, 220, 0.4), 0 8px 15px rgba(254, 242, 220, 0.3);
     transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.4);
+    background: #FFF7E6;
 }
 
 .draw-btn:active {
-    box-shadow: 0 2px 8px rgba(177, 190, 242, 0.2);
+    box-shadow: 0 5px 10px rgba(254, 242, 220, 0.3), 0 2px 5px rgba(254, 242, 220, 0.2);
     transform: translateY(0);
+    background: #F0E2C0;
 }
 
 .draw-btn:disabled {
-    background: rgba(255, 255, 255, 0.2);
+    background: #E0D2B0;
     cursor: not-allowed;
-    box-shadow: 0 2px 8px rgba(177, 190, 242, 0.1);
-    color: rgba(51, 51, 51, 0.6);
-    border-color: rgba(177, 190, 242, 0.3);
+    box-shadow: 0 4px 8px rgba(254, 242, 220, 0.2), 0 2px 4px rgba(254, 242, 220, 0.1);
+    color: rgba(176, 34, 27, 0.6);
+    border-color: #E0D2B0;
 }
 
 /* 结果页面样式 */
@@ -205,9 +203,9 @@ body {
     transform: translateX(-50%);
     font-size: 20px;
     font-weight: bold;
-    color: #B1BEF2;
+    color: #FEF2DC;
     z-index: 11;
-    text-shadow: 1px 1px 2px rgba(177, 190, 242, 0.3);
+    text-shadow: 1px 1px 2px rgba(176, 34, 27, 0.3);
 }
 
 /* 花瓣样式 */
