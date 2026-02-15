@@ -145,7 +145,7 @@ drawBtn.addEventListener('click', () => {
         if (timeDiff < sixtyMinutes) {
             // 计算剩余时间
             const remainingTime = sixtyMinutes - timeDiff;
-            const minutes = Math.floor(remainingTime / (60 * 1000));
+            const minutes = Math.floor(remainingTime / (3 * 60 * 1000));
             const seconds = Math.floor((remainingTime % (60 * 1000)) / 1000);
             
             // 显示倒计时弹窗
