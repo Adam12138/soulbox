@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #FEE3EC 0%, #F2E6F0 50%, #B1BEF2 100%);
+            background: #b0221b;
             overflow: hidden;
             width: 100vw;
             height: 100vh;
@@ -70,18 +70,27 @@
         /* 标题样式 */
         h1 {
             font-size: 32px;
-            color: #333;
+            color: #FEF2DC;
             margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(177, 190, 242, 0.3);
+            text-shadow: 3px 3px 6px rgba(176, 34, 27, 0.3);
             font-weight: bold;
         }
 
         /* 卦象名称样式 */
         #hexagram-name {
             font-size: 28px;
-            color: #333;
+            color: #FEF2DC;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(176, 34, 27, 0.3);
+            font-weight: bold;
+        }
+
+        /* 卦象结果样式 */
+        #hexagram-result {
+            font-size: 20px;
+            color: #FEF2DC;
             margin-bottom: 20px;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+            text-shadow: 3px 3px 6px rgba(176, 34, 27, 0.3);
             font-weight: bold;
         }
 
@@ -89,10 +98,21 @@
         #hexagram-explanation {
             font-size: 16px;
             line-height: 1.6;
-            color: #333;
+            color: #FEF2DC;
+            margin-bottom: 20px;
+            text-align: left;
+            text-shadow: 3px 3px 6px rgba(176, 34, 27, 0.3);
+        }
+
+        /* 卦象建议样式 */
+        #hexagram-advice {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #FEF2DC;
             margin-bottom: 30px;
             text-align: left;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+            text-shadow: 3px 3px 6px rgba(176, 34, 27, 0.3);
+            font-style: italic;
         }
 
         /* 玻璃拟态重置按钮 */
@@ -100,27 +120,25 @@
             padding: 16px 40px;
             font-size: 20px;
             font-weight: bold;
-            color: #333;
-            /* 玻璃拟态效果 */
-            background: rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(245, 196, 226, 0.5);
+            color: #b0221b;
+            background: #FEF2DC;
+            border: 1px solid #FEF2DC;
             border-radius: 35px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(177, 190, 242, 0.2);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            box-shadow: 0 10px 20px rgba(254, 242, 220, 0.3), 0 4px 8px rgba(254, 242, 220, 0.2);
         }
 
         .reset-btn:hover {
-            box-shadow: 0 8px 20px rgba(177, 190, 242, 0.3);
+            box-shadow: 0 15px 25px rgba(254, 242, 220, 0.4), 0 8px 15px rgba(254, 242, 220, 0.3);
             transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.4);
+            background: #FFF7E6;
         }
 
         .reset-btn:active {
-            box-shadow: 0 2px 8px rgba(177, 190, 242, 0.2);
+            box-shadow: 0 5px 10px rgba(254, 242, 220, 0.3), 0 2px 5px rgba(254, 242, 220, 0.2);
             transform: translateY(0);
+            background: #F0E2C0;
         }
     </style>
 </head>
@@ -129,17 +147,19 @@
     <div class="result-container">
         <h1>抽签结果</h1>
         <h2 id="hexagram-name"></h2>
+        <div id="hexagram-result"></div>
         <div id="hexagram-explanation"></div>
+        <div id="hexagram-advice"></div>
         <button id="generate-card-btn" class="reset-btn" onclick="generateFortuneCard()">生成马年专属心灵卡</button>
         <button class="reset-btn" onclick="location.href='index.html'">重新抽签</button>
         
         <!-- 心灵卡预览容器 -->
         <div id="card-preview" style="margin-top: 30px; display: none;">
-            <h3 style="margin-bottom: 20px; color: #333; text-shadow: 1px 1px 2px rgba(177, 190, 242, 0.3);">心灵卡预览</h3>
-            <canvas id="fortune-card" width="230" height="320" style="border: 2px solid #B1BEF2; border-radius: 10px;"></canvas>
+            <h3 style="margin-bottom: 20px; color: #FEF2DC; text-shadow: 3px 3px 6px rgba(176, 34, 27, 0.3);">心灵卡预览</h3>
+            <canvas id="fortune-card" width="230" height="320" style="border: 2px solid #FEF2DC; border-radius: 10px;"></canvas>
             <div style="margin-top: 20px;">
                 <button class="reset-btn" onclick="saveFortuneCard()">保存心灵卡</button>
-                <p style="margin-top: 10px; font-size: 14px; color: #333; text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);">保存后分享给好友，传递马年好运！</p>
+                <p style="margin-top: 10px; font-size: 14px; color: #FEF2DC; text-shadow: 3px 3px 6px rgba(176, 34, 27, 0.3);">保存后分享给好友，传递马年好运！</p>
             </div>
         </div>
     </div>
@@ -152,95 +172,69 @@
             return urlParams.get(name);
         }
 
-        // 六十四卦数据
+        // 二百卦数据
         const hexagrams = [
-            { id: 1, name: "乾卦", sentence: "乐观是一种可以习得的技能，不是天赋，而是后天修炼的力量。", explanation: "乾为天，刚健中正。象征着天道运行，君子应当效法天道，自强不息。此卦主吉，事业顺利，运势亨通。" },
-            { id: 2, name: "坤卦", sentence: "奇妙的悖论是，当我接受自己本来的样子时，我就能改变了。", explanation: "坤为地，柔顺包容。象征着地德载物，君子应当效法地德，厚德载物。此卦主吉，人际关系和谐，事业稳定发展。" },
-            { id: 3, name: "屯卦", sentence: "不是看到希望才坚持，而是坚持了才看到希望。", explanation: "屯者，物之始生也。象征着事物初始阶段的艰难，需要积蓄力量，耐心等待时机。此卦主凶中有吉，虽有困难，但只要坚持就能度过。" },
-            { id: 4, name: "蒙卦", sentence: "生命的最佳时刻发生在自愿的目标追求中。", explanation: "蒙者，蒙昧也。象征着启蒙教育，需要虚心学习，接受指导。此卦主吉，通过学习和指导能够获得进步和成长。" },
-            { id: 5, name: "需卦", sentence: "你拥有的只有此刻，把注意力锚定在这里。", explanation: "需者，等待也。象征着等待时机，不要急躁，顺应自然。此卦主吉，耐心等待会有好的结果。" },
-            { id: 6, name: "讼卦", sentence: "你看待事物的方式决定了一切，而不是事物本身如何。", explanation: "讼者，争讼也。象征着争端和诉讼，需要谨慎处理，避免冲突。此卦主凶，建议以和为贵，避免争执。" },
-            { id: 7, name: "师卦", sentence: "爱意味着积极地关心另一个人的生活和成长。", explanation: "师者，军队也。象征着团队合作，需要严明纪律，团结一心。此卦主吉，事业需要团队协作才能成功。" },
-            { id: 8, name: "比卦", sentence: "孤独并不是来自身边无人，而是无法与他人交流对其最要紧的感受。", explanation: "比者，亲近也。象征着人际关系，需要真诚相待，互相帮助。此卦主吉，人际关系和谐，事业顺利。" },
-            { id: 9, name: "小畜卦", sentence: "你的弱点不重要，你的优势才定义你是谁。", explanation: "小畜者，小有所畜也。象征着小有积蓄，需要继续努力，不可骄傲。此卦主吉，事业有小成，前途光明。" },
-            { id: 10, name: "履卦", sentence: "你是谁，取决于你的行动，而非你的言语。", explanation: "履者，履行也。象征着行动和实践，需要谨慎行事，遵守规则。此卦主吉，做事谨慎能够成功。" },
-            { id: 11, name: "泰卦", sentence: "乐观者在每个危机里看到机会，悲观者在每个机会里看见危机。", explanation: "泰者，通也。象征着通达顺利，天地交泰，万物繁荣。此卦主吉，事业顺利，运势亨通。" },
-            { id: 12, name: "否卦", sentence: "即使在最黑暗的时刻，我们也能找到光明，希望是唯一比恐惧更强大的东西。", explanation: "否者，不通也。象征着阻塞不顺，需要耐心等待，积蓄力量。此卦主凶，建议保守行事，等待时机。" },
-            { id: 13, name: "同人卦", sentence: "我们是在与世界的碰撞中认识自己的，你的特质，善良、勇敢、幽默，这些都需要与人和事的互动中得以展现和确认。", explanation: "同人者，同于仁也。象征着志同道合，需要团结一心，共同奋斗。此卦主吉，团队合作能够成功。" },
-            { id: 14, name: "大有卦", sentence: "做你擅长的事，世界会回报你。", explanation: "大有者，大有所获也。象征着收获丰盛，需要谦虚谨慎，不可骄傲。此卦主吉，事业有成，财富丰厚。" },
-            { id: 15, name: "谦卦", sentence: "真正的强大，是允许自己脆弱。", explanation: "谦者，谦逊也。象征着谦虚谨慎，不骄不躁。此卦主吉，谦虚使人进步，事业顺利。" },
-            { id: 16, name: "豫卦", sentence: "每天做一件让自己开心的事，这是对生活最温柔的反抗。", explanation: "豫者，愉悦也。象征着快乐和满足，需要保持适度，不可过度享乐。此卦主吉，心情愉快，事业顺利。" },
-            { id: 17, name: "随卦", sentence: "活在当下，不是忽视未来，而是让未来从当下的选择中自然展开。", explanation: "随者，随从也。象征着顺应时势，跟随正确的方向。此卦主吉，顺应潮流能够成功。" },
-            { id: 18, name: "蛊卦", sentence: "每一次跌倒，都是重新校准方向的机会。", explanation: "蛊者，蛊惑也。象征着问题和困惑，需要及时解决，不可拖延。此卦主凶，建议及时处理问题，避免恶化。" },
-            { id: 19, name: "临卦", sentence: "改变你的思想，你就能改变你的世界。", explanation: "临者，临近也。象征着领导和管理，需要以身作则，关爱下属。此卦主吉，领导力强，事业顺利。" },
-            { id: 20, name: "观卦", sentence: "往外看的人在做梦，向内审视的人才清醒。", explanation: "观者，观察也。象征着观察和思考，需要明察秋毫，深思熟虑。此卦主吉，善于观察能够做出正确的决策。" },
-            { id: 21, name: "噬嗑卦", sentence: "行动是治愈恐惧的良药，犹豫、拖延会不断滋养恐惧。", explanation: "噬嗑者，咬合也。象征着解决问题，需要果断行动，清除障碍。此卦主吉，能够克服困难，解决问题。" },
-            { id: 22, name: "贲卦", sentence: "生命不是等待暴风雨过去，而是学会在雨中跳舞。", explanation: "贲者，文饰也。象征着修饰和美化，需要适度装饰，不可过度。此卦主吉，适当的修饰能够提升形象和价值。" },
-            { id: 23, name: "剥卦", sentence: "处于低谷时，四面都是上坡路。", explanation: "剥者，剥落也。象征着衰退和损失，需要谨慎行事，保存实力。此卦主凶，建议保守防御，避免损失。" },
-            { id: 24, name: "复卦", sentence: "你抗拒的东西会持续存在，你正视的东西会逐渐转化。", explanation: "复者，回复也。象征着恢复和生机，需要积极行动，重新开始。此卦主吉，能够恢复活力，重新发展。" },
-            { id: 25, name: "无妄卦", sentence: "我并非由过往经历塑造，而是由选择成为的样子决定。", explanation: "无妄者，无虚妄也。象征着真实和正直，需要脚踏实地，不可虚妄。此卦主吉，真诚做事能够成功。" },
-            { id: 26, name: "大畜卦", sentence: "我们常常高估一次性改变的难度，低估每天微小改变的累积力量。", explanation: "大畜者，大有所畜也。象征着积蓄力量，需要不断努力，厚积薄发。此卦主吉，积蓄充足，事业有成。" },
-            { id: 27, name: "颐卦", sentence: "知足是天然的财富，欲望是人为的贫穷。", explanation: "颐者，养也。象征着养生和培养，需要注重修养，培养品德。此卦主吉，注重修养能够获得福报。" },
-            { id: 28, name: "大过卦", sentence: "你生命的前半辈子或许属于别人，活在别人的认为里。那把后半辈子还给你自己，去追随你内在的声音。", explanation: "大过者，太过也。象征着过度和极端，需要谨慎行事，避免过度。此卦主凶，建议中庸之道，避免极端。" },
-            { id: 29, name: "坎卦", sentence: "韧性不是避免跌倒，而是每次跌倒都能站起来。", explanation: "坎者，陷也。象征着困难和危险，需要勇敢面对，克服困难。此卦主凶，虽有困难，但只要勇敢就能度过。" },
-            { id: 30, name: "离卦", sentence: "人类存在的唯一目的，是在纯粹的自在的黑暗中点亮一盏灯。", explanation: "离者，丽也。象征着光明和美丽，需要保持光明磊落，追求美好。此卦主吉，光明正大，事业顺利。" },
-            { id: 31, name: "咸卦", sentence: "爱是一种需要学习的能力，先成为完整的自己，才能与他人建立深刻的联结。", explanation: "咸者，感也。象征着感应和交流，需要真诚沟通，互相理解。此卦主吉，人际关系和谐，感情顺利。" },
-            { id: 32, name: "恒卦", sentence: "微小的、持续的调整，比雄心勃勃的失败更有力量。", explanation: "恒者，久也。象征着持久和稳定，需要持之以恒，坚持不懈。此卦主吉，坚持努力能够成功。" },
-            { id: 33, name: "遁卦", sentence: "真正的成熟，是在保持柔软的同时，建立起保护自己的边界。", explanation: "遁者，退也。象征着退避和隐居，需要审时度势，适时退让。此卦主凶中有吉，适时退让能够保全自己。" },
-            { id: 34, name: "大壮卦", sentence: "真正的自由不是为所欲为，而是有所不为的意志力。", explanation: "大壮者，壮大也。象征着强大和壮大，需要保持谦虚，不可傲慢。此卦主吉，实力强大，事业顺利。" },
-            { id: 35, name: "晋卦", sentence: "不必追着别人的光芒跑，找到自己的闪光点，你就是独一无二的光。", explanation: "晋者，进也。象征着前进和晋升，需要积极进取，不断努力。此卦主吉，事业有晋升机会，运势上升。" },
-            { id: 36, name: "明夷卦", sentence: "即使在最黑暗的时刻，我们也能找到光明，希望是唯一比恐惧更强大的东西。", explanation: "明夷者，明伤也。象征着光明受到伤害，需要韬光养晦，等待时机。此卦主凶，建议低调行事，等待时机。" },
-            { id: 37, name: "家人卦", sentence: "深厚的关系是幸福的最强预测因素。", explanation: "家人者，家也。象征着家庭和亲情，需要和睦相处，互相关爱。此卦主吉，家庭和谐，幸福美满。" },
-            { id: 38, name: "睽卦", sentence: "最高级的共情，是理解他人为何无法理解你。", explanation: "睽者，乖离也。象征着分歧和矛盾，需要求同存异，化解矛盾。此卦主凶中有吉，能够化解分歧，达成共识。" },
-            { id: 39, name: "蹇卦", sentence: "那些让你痛苦的、困惑的、焦虑的，其实都是潜意识在提醒你 —— 该向内看了。", explanation: "蹇者，难也。象征着艰难和困境，需要勇敢面对，寻求帮助。此卦主凶，虽有困难，但只要努力就能克服。" },
-            { id: 40, name: "解卦", sentence: "疗愈不是回到受伤前的样子，而是带着伤疤活出新的可能。", explanation: "解者，解难也。象征着解决困难，需要抓住时机，果断行动。此卦主吉，能够解决困难，迎来转机。" },
-            { id: 41, name: "损卦", sentence: "说 “不” 的能力，决定了你说 “是” 的价值。", explanation: "损者，减损也。象征着损失和减少，需要权衡利弊，适当取舍。此卦主凶中有吉，适当的损失能够换来更大的收获。" },
-            { id: 42, name: "益卦", sentence: "失败不是 “我不行” 的证明，而是 “我还没练会” 的信号 —— 成长型思维，才是抗挫的底气。", explanation: "益者，增益也。象征着增益和收获，需要乐于助人，互相帮助。此卦主吉，助人为乐，事业顺利。" },
-            { id: 43, name: "夬卦", sentence: "当你使用最强的优势应对最大的挑战时，就能体验到极致的满足感。", explanation: "夬者，决也。象征着决断和解决，需要果断决策，清除障碍。此卦主吉，果断决策能够成功。" },
-            { id: 44, name: "姤卦", sentence: "生命的意义在于找到你的礼物，生命的目的是给予它。", explanation: "姤者，遇也。象征着相遇和机会，需要把握时机，积极进取。此卦主吉，遇到贵人，机会来临。" },
-            { id: 45, name: "萃卦", sentence: "居安思危，思则有备，有备无患。", explanation: "萃者，聚也。象征着聚集和团结，需要团结一心，共同奋斗。此卦主吉，团结协作能够成功。" },
-            { id: 46, name: "升卦", sentence: "我们常常高估一次性改变的难度，低估每天微小改变的累积力量。", explanation: "升者，上升也。象征着上升和发展，需要不断努力，循序渐进。此卦主吉，事业稳步上升，前途光明。" },
-            { id: 47, name: "困卦", sentence: "意义不是被发现的，而是被创造的。", explanation: "困者，困厄也。象征着困境和挫折，需要坚韧不拔，寻求突破。此卦主凶，虽有困境，但只要坚持就能突破。" },
-            { id: 48, name: "井卦", sentence: "每天都需要用乐观去拥抱生活", explanation: "井者，水井也。象征着滋养和奉献，需要保持正直，无私奉献。此卦主吉，品德高尚，事业顺利。" },
-            { id: 49, name: "革卦", sentence: "生活的不确定性正是我们希望的来源。", explanation: "革者，变革也。象征着变革和创新，需要顺应时势，勇于创新。此卦主吉，改革创新能够成功。" },
-            { id: 50, name: "鼎卦", sentence: "你生命的前半辈子或许属于别人，活在别人的认为里。那把后半辈子还给你自己，去追随你内在的声音。", explanation: "鼎者，鼎器也。象征着权威和稳定，需要稳重行事，保持权威。此卦主吉，地位稳固，事业顺利。" },
-            { id: 51, name: "震卦", sentence: "你不是你的情绪，而是情绪的观察者。", explanation: "震者，雷也。象征着震动和警示，需要保持警惕，谨慎行事。此卦主凶中有吉，能够吸取教训，改过自新。" },
-            { id: 52, name: "艮卦", sentence: "活在当下，不是忽视未来，而是让未来从当下的选择中自然展开。", explanation: "艮者，山也。象征着停止和稳重，需要适可而止，保持稳重。此卦主吉，稳重行事能够成功。" },
-            { id: 53, name: "渐卦", sentence: "人生没有太晚的开始，只有从未开始的遗憾。", explanation: "渐者，渐进也。象征着渐进和发展，需要循序渐进，不可急躁。此卦主吉，稳步发展能够成功。" },
-            { id: 54, name: "归妹卦", sentence: "健康的关系不是彼此缠绕，而是两棵并肩生长的树。", explanation: "归妹者，嫁妹也。象征着婚姻和家庭，需要真诚相待，互相尊重。此卦主吉，婚姻美满，家庭幸福。" },
-            { id: 55, name: "丰卦", sentence: "即使是幸福的生活也不可能没有一些黑暗，如果没有悲伤的平衡，“幸福” 这个词就会失去意义。", explanation: "丰者，丰盛也。象征着丰盛和繁荣，需要保持谦虚，不可骄傲。此卦主吉，事业繁荣，财富丰厚。" },
-            { id: 56, name: "旅卦", sentence: "孤独并不是来自身边无人，而是无法与他人交流对其最要紧的感受。", explanation: "旅者，旅行也。象征着旅行和漂泊，需要适应环境，随遇而安。此卦主凶中有吉，能够适应变化，有所收获。" },
-            { id: 57, name: "巽卦", sentence: "当我们真正接受自己时，改变的力量会自然生长，就像种子遇见春天。", explanation: "巽者，风也。象征着柔顺和服从，需要谦虚谨慎，服从真理。此卦主吉，谦虚柔顺能够成功。" },
-            { id: 58, name: "兑卦", sentence: "快乐不是偶然发生的，而是由你的选择决定的。", explanation: "兑者，悦也。象征着喜悦和快乐，需要保持乐观，与人为善。此卦主吉，心情愉快，人际关系和谐。" },
-            { id: 59, name: "涣卦", sentence: "最深的痛苦往往源于抗拒本应经历的痛苦。", explanation: "涣者，涣散也。象征着涣散和分离，需要团结一心，凝聚力量。此卦主凶，建议加强团结，避免涣散。" },
-            { id: 60, name: "节卦", sentence: "知足是天然的财富，欲望是人为的贫穷。", explanation: "节者，节制也。象征着节制和节约，需要适度节制，不可过度。此卦主吉，适度节制能够保持平衡和稳定。" },
-            { id: 61, name: "中孚卦", sentence: "信任是关系的基石，而信任的基石是真诚。", explanation: "中孚者，诚信也。象征着诚信和信任，需要真诚相待，信守承诺。此卦主吉，诚信做事能够获得信任和成功。" },
-            { id: 62, name: "小过卦", sentence: "每个 “必须” 背后，都藏着一个未被审视的恐惧。", explanation: "小过者，小有所过也。象征着小的过错，需要及时改正，不可忽视。此卦主凶中有吉，能够及时改正错误，避免大患。" },
-            { id: 63, name: "既济卦", sentence: "最好的决策往往在 “足够好” 时做出，而非 “完美” 时。", explanation: "既济者，既成也。象征着成功和完成，需要保持警惕，不可懈怠。此卦主吉，事业成功，需要保持谨慎。" },
-            { id: 64, name: "未济卦", sentence: "生命不是一场终点冲刺，而是一场持续的旅程，重要的是沿途的风景与成长。", explanation: "未济者，未成也。象征着未完成和继续努力，需要坚持不懈，继续奋斗。此卦主凶中有吉，只要继续努力就能成功。" }
+            { id: 1, name: "乾卦", result: "大吉", sentence: "天行健，君子以自强不息。——《周易·乾卦》", explanation: "乾为天，卦象纯阳，刚健中正乃天道核心，象征天地运行不止的磅礴力量。此卦照见人事主气运登顶，事业呈扶摇直上之态，思维清晰、行动力拉满，能凭自身毅力突破一切阻碍，正财偏财皆有丰厚进账，贵人运隐现于侧。君子效法天道，以自强不息本心做事，不骄不躁、勇往直前，学业、事业、生活各方面皆能顺遂，甚至收获意料之外的重大成果，是大展拳脚的黄金时机。", adviceAI: "穿金色衣物，朝东走百步" },
+            { id: 2, name: "坤卦", result: "大吉", sentence: "世界上最宽阔的是海洋，比海洋更宽阔的是天空，比天空更宽阔的是人的胸怀。——雨果", explanation: "坤为地，卦象纯阴，柔顺包容是地德核心，象征大地承载万物、孕育生机的博大。此卦主人际气运昌隆，当下的包容之心能让你收获身边人的真心信任与喜爱，家庭和睦无矛盾，职场中与同事协作融洽，更能得上级赏识与提携。大地不语却滋养万物，此时以柔克刚，遇事退让包容，默默积累人脉与福德，看似缓慢的前行，实则为后续发展筑牢最坚实的根基，安稳之中藏无尽福气与潜在机遇。", adviceAI: "戴玉饰，吃软糯杂粮" },
+            { id: 3, name: "泰卦", result: "大吉", sentence: "乐观者在每个危机里看到机会，悲观者在每个机会里看见危机。——丘吉尔", explanation: "泰者，通也，卦象坤地在上、乾天在下，阴阳相交、上下相通，乃六十四卦中少有的全吉之象，象征气运通达、万事顺遂。此卦主当下整体气运达到顶峰，天地相融、百废俱兴，事业上一路通达，思维清晰、行动力强，能在危机中精准发现机遇，突破一切阻碍收获丰硕成果，财运上正财偏财皆旺，有意外大额财富进账，人际上家庭和睦、朋友相助，贵人运爆棚，可大胆推进所有计划，坚守正道便会好运翻倍。", adviceAI: "穿明黄，往南方出行" },
+            { id: 4, name: "大有卦", result: "大吉", sentence: "做你擅长的事，世界会回报你。——奥普拉·温弗瑞", explanation: "大有者，大有所获也，卦象离火在上、坤地在下，火生大地、万物丰饶，象征事业有成、财富丰厚。此卦主当下事业抵达新顶峰，凭借自身擅长的能力收获突破性成果，财运上正财旺相，有大量财富进账，人际上受人尊敬与爱戴，家庭和睦、贵人相助，整体气运呈丰饶之态。但物极必反，满则溢，此时最忌骄傲自满、目中无人，保持谦虚谨慎、懂得感恩分享，才能让这份好运长久相伴，基业长青。", adviceAI: "摆绿植，收获后多分享" },
+            { id: 5, name: "鼎新卦", result: "大吉", sentence: "穷则变，变则通，通则久。——《周易·系辞下》", explanation: "鼎新卦取革故鼎新之意，卦象离火在上、巽风在下，风火相济、推陈出新，象征旧局破除、新运将至。此卦主过往的小困扰、小阻碍皆会彻底消散，新的机会和好运接连到来，事业上有突破性新发展，甚至能开启新的赛道，财运上有意外之财，人际上会结识能带来机遇的贵人，整体气运呈阶梯式上升，是突破自我、开启新篇的最佳时机，大胆变革便能收获满满。", adviceAI: "换新手杯，穿浅绿色" },
+            { id: 6, name: "丰隆卦", result: "大吉", sentence: "福兮祸所伏，祸兮福所倚。——《老子·五十八章》", explanation: "丰隆卦取气运满盈、福运隆盛之意，卦象震雷在上、兑泽在下，雷泽相和、福运汇聚。此卦主财运、人缘运双丰收，工作上能得到上级高度认可，有晋升或加薪的重大机会，生活中能收获亲友的暖心陪伴，小财小福不断，甚至有意外的喜事降临，整体状态如沐春风，身心安康，无任何烦心事，是难得的福运鼎盛期。", adviceAI: "戴银饰，吃蓝莓葡萄" },
+            { id: 7, name: "高升卦", result: "大吉", sentence: "机会总是留给有准备的人。——巴斯德", explanation: "高升卦取事业攀升、步步高升之意，卦象乾天在上、巽风在下，天风相扶、气运上扬。此卦主工作、学习上有明显的突破性进步，职场中有晋升的绝佳机会，自身能力能得到充分展现，被身边人高度认可，发展前景一片明朗，财运也会随事业晋升而水涨船高，此时只需抓住机会、稳步前行，便能抵达新的高度。", adviceAI: "戴钢笔配饰，吃核桃杏仁" },
+            { id: 8, name: "聚福卦", result: "大吉", sentence: "众人拾柴火焰高。——中国俗语", explanation: "聚福卦取福运汇聚、贵人相伴之意，卦象坤地在上、艮山在下，山地相聚、福泽深厚。此卦主行事有贵人鼎力相助，遇到任何问题都能迎刃而解，生活中充满小美好，财运虽非大富大贵，但小财不断、无破财风险，职场中团队协作顺畅，能借助集体的力量收获重大成果，整体无烦心事，福运绵长。", adviceAI: "摆多肉，穿粉色衣物" },
+            { id: 9, name: "明泰卦", result: "大吉", sentence: "心有丘壑，眼有星光。——《晋书·谢安传》引申", explanation: "明泰卦取光明通达、心境顺遂之意，卦象离火在上、坤地在下，火地相生、气运澄澈。此卦主心境顺遂，行事无旁骛，不管是人际相处还是工作推进，都能顺风顺水，甚至会有素未谋面的贵人出手相助，收获意料之外的好运，学业上能突飞猛进，事业上能攻克长期难题，财运上有意外进账，整体气运一片光明。", adviceAI: "带银杏叶，吃梨和柚子" },
+            { id: 10, name: "顺遂卦", result: "大吉", sentence: "当你真心渴望某样东西时，整个宇宙都会来帮你。——保罗·戈埃罗《牧羊少年奇幻之旅》", explanation: "顺遂卦取万事顺遂、毫无阻滞之意，卦象兑泽在上、乾天在下，天泽相济、天地气运皆为己用。此卦主做任何事都能事半功倍，即使有小插曲也能快速化解，是近期气运的顶峰阶段，适合推进重要事宜、做出重大决策，学业、事业、财运、感情皆能顺风顺水，心中所想皆能得偿所愿。", adviceAI: "穿红色，晨起念吉祥话" },
+            { id: 11, name: "师卦", result: "中吉", sentence: "二人同心，其利断金。——《周易·系辞上》", explanation: "师者，军队也，卦象坎水在下、坤地在上，如同兵将受主帅统领，众人同心方能凝聚磅礴力量。此卦主当下团队气运旺盛，事业上单打独斗只会事倍功半，唯有依靠集体的力量才能突破瓶颈、收获丰硕成果。此时做好团队协作，知人善任、凝聚人心，坚守团队规则、以身作则，便能带领团队攻坚克难，职场中得下属拥护、上级认可，创业或合作之事也能顺风顺水，生活中与亲友同心，遇事互相帮扶便无难事。", adviceAI: "戴红手串，和同伴聚餐" },
+            { id: 12, name: "比卦", result: "中吉", sentence: "孤独，是忧愁的伴侣，也是精神活动的密友。——纪伯伦《沙与沫》", explanation: "比者，亲近也，卦象坤地在上、坎水在下，如同水绕地行、相融相生，象征人际间的亲近与帮扶。此卦主当下贵人运与人缘运双旺，彻底摆脱孤独的困境，身边会有真心相待的亲友和贵人，在你需要帮助时及时伸出援手，职场中能得同事鼎力相助，生活中能遇知己相伴，甚至会有意外的贵人提携，让前行之路更顺畅。此时真诚待人、懂得感恩，主动维系人际关系，以真心换真心，便能让这份好运长久相伴。", adviceAI: "带桂花香囊，和朋友小聚" },
+            { id: 13, name: "同人卦", result: "中吉", sentence: "志合者，不以山海为远。——葛洪《抱朴子·博喻》", explanation: "同人者，同于仁也，卦象离火在上、乾天在下，火天相融、心意相通，象征有同道之人相伴。此卦主当下团队气运与贵人运皆旺，身边会出现与你志同道合、三观相合的人，无论是事业上的合作伙伴，还是生活中的知己，皆能与你同心协力、互相扶持，一起突破困难、收获成果。职场中能与团队成员同心同德，让工作效率翻倍，创业或合作之事也能顺风顺水，珍惜这份缘分便能让事业更上一层楼。", adviceAI: "穿橙色，和同伴定共同目标" },
+            { id: 14, name: "临卦", result: "中吉", sentence: "改变你的思想，你就能改变你的世界。——拿破仑·希尔《思考致富》", explanation: "临者，临近也，卦象坤地在上、兑泽在下，地泽相临、亲民近人，象征领导和管理的智慧。此卦主当下领导力与个人魅力尽显，事业上若处于管理岗位，能以身作则、关爱下属，赢得团队的真心拥护，让团队凝聚力翻倍，工作效率大幅提升；即使非管理岗位，也能以自身的思想与行动影响身边人，成为团队中的核心人物。此时打破固有的思维模式，以新的思路面对工作，便能让事业发展打开新的局面，运势一路上扬。", adviceAI: "穿藏青，每日写工作心得" },
+            { id: 15, name: "噬嗑卦", result: "中吉", sentence: "行动是治愈恐惧的良药，犹豫、拖延会不断滋养恐惧。——马克·吐温", explanation: "噬嗑者，咬合也，卦象离火在上、震雷在下，火雷相击、刚健果断，象征解决问题、清除障碍。此卦主当下身边虽有阻碍与困难，心中难免有恐惧与犹豫，但只要敢于行动、果断决策，便能快速克服困难、清除障碍，收获成功。事业上遇到问题切勿拖延犹豫，直面问题、果断行动便能快速解决，生活中遇到困境也无需逃避，大胆迈出第一步，所有的恐惧都会迎刃而解，气运也会随行动而转旺。", adviceAI: "带黑曜石，遇事立刻行动" },
+            { id: 16, name: "离卦", result: "中吉", sentence: "人类存在的唯一目的，是在纯粹的自在的黑暗中点亮一盏灯。——卡尔·荣格", explanation: "离者，丽也，卦象离火重叠、光明万丈，象征光明和美丽，光明磊落方为立身之本。此卦主当下气运光明，为人光明磊落、做事坦坦荡荡，能收获身边人的信任与尊重，事业上秉持初心、光明做事，便能避开小人与陷阱，顺顺利利推进，甚至能成为身边人的光，带领他人一起前行。此时继续保持光明磊落的本心，追求美好与正义，不做亏心事，光明的心境与行事方式会让气运一路旺相。", adviceAI: "穿白色，睡前点香薰" },
+            { id: 17, name: "咸卦", result: "中吉", sentence: "爱，是理解的别名。——泰戈尔《飞鸟集》", explanation: "咸者，感也，卦象艮山在上、兑泽在下，山泽相感、心意相通，象征感应和交流。此卦主感情与人际气运旺相，当下宜学会爱自己，先成为完整的自己，再与他人建立深刻的联结，感情上能遇到与自己心意相通的人，收获甜蜜的感情，人际上能与他人真诚沟通、互相理解，收获真挚的友情与亲情。事业上也能因良好的沟通能力，与同事、客户相处融洽，让工作顺利推进。", adviceAI: "戴粉晶，吃草莓桃子" },
+            { id: 18, name: "大壮卦", result: "中吉", sentence: "真正的自由不是为所欲为，而是有所不为的意志力。——蒙田《蒙田随笔》", explanation: "大壮者，壮大也，卦象乾天在上、震雷在下，天雷大壮、实力雄厚，象征当下自身实力强大，事业呈壮大之态。此卦主当下事业实力雄厚，有足够的能力突破阻碍、收获成功，财运上也有稳定的进账，人际上也有一定的话语权，但实力强大更需懂得克制。此时保持谦虚的态度，摒弃为所欲为的想法，拥有有所不为的意志力，坚守底线、遵守规则，不恃强凌弱，懂得收敛锋芒，方能让事业持续壮大。", adviceAI: "戴钛钢饰，吃牛肉西兰花" },
+            { id: 19, name: "晋卦", result: "中吉", sentence: "天生我材必有用，千金散尽还复来。——李白《将进酒》", explanation: "晋者，进也，卦象离火在上、坤地在下，火地相晋、步步高升，象征前进和晋升。此卦主当下事业有晋升的机会，自身的闪光点开始被发现，无需盲目追逐他人的脚步，做好自己、发挥自身的优势，便能收获属于自己的成功。此时大胆展现自己的闪光点，主动抓住事业上的晋升机会，摒弃自卑与攀比的心态，相信自己的能力，找准自己的发展方向，稳步前行便能步步高升。", adviceAI: "穿浅橘，戴星星配饰" },
+            { id: 20, name: "解卦", result: "中吉", sentence: "沉舟侧畔千帆过，病树前头万木春。——刘禹锡《酬乐天扬州初逢席上见赠》", explanation: "解者，解难也，卦象坎水在上、震雷在下，雷雨相解、困境消散，象征解决困难、迎来转机。此卦主当下摆脱过往的困境，之前的难题开始被解决，事业上迎来新的转机，有新的发展机会出现，生活中也能走出痛苦的阴霾，活出新的可能。此时抓住这个转机，果断行动、大胆尝试，不要被过往的伤疤所束缚，把伤疤当作成长的勋章，带着勇气与希望前行，便能让事业与生活迎来新的发展。", adviceAI: "带紫水晶，去郊外走走" },
+            { id: 21, name: "益卦", result: "中吉", sentence: "失败不是“我不行”的证明，而是“我还没练会”的信号。——卡罗尔·德韦克《终身成长》", explanation: "益者，增益也，卦象巽风在上、震雷在下，风雷相益、互利共赢，象征增益和收获。此卦主当下宜拥有成长型思维，把失败当作成长的机会，乐于助人、互相帮助，便能收获他人的回报。事业上与同事互相扶持、互利共赢，便能让工作效率翻倍，收获更多的成果，财运上也有意外的增益，人际上也能收获更多的朋友与贵人，乐于助人、保持成长型思维，便能让自身的气运不断增益。", adviceAI: "带绿幽灵，帮身边人一件小事" },
+            { id: 22, name: "夬卦", result: "中吉", sentence: "物竞天择，适者生存。——赫胥黎《天演论》", explanation: "夬者，决也，卦象乾天在上、兑泽在下，天泽相夬、果断决策，象征决断和解决。此卦主当下遇重大挑战，但同时也有发挥自身最强优势的机会，只要敢于果断决策，用自身的优势应对挑战，便能突破一切阻碍，收获极致的满足感与成功。事业上抓住这个挑战的机会，大胆展现自身的优势，果断做出决策，便能让事业发展登上新的台阶，此时切勿犹豫，果断行动便是最好的选择。", adviceAI: "穿宝蓝，吃深海鱼" },
+            { id: 23, name: "姤卦", result: "中吉", sentence: "生命的意义在于找到你的礼物，生命的目的是给予它。——约瑟夫·坎贝尔《千面英雄》", explanation: "姤者，遇也，卦象巽风在上、乾天在下，天风相遇、贵人将至，象征相遇和机会。此卦主当下能遇到生命中的贵人，同时也能找到自身的“礼物”——即自身的天赋与价值，事业上有新的发展机会出现，贵人会在你需要时伸出援手，帮助你抓住机会，实现自身的价值。此时大胆展现自身的天赋，主动抓住机会，懂得分享与给予，把自身的“礼物”带给他人，便能收获他人的认可与回报。", adviceAI: "带月光石，喝蜂蜜水" },
+            { id: 24, name: "革卦", result: "中吉", sentence: "生活的不确定性正是我们希望的来源。——约翰·肯尼思·加尔布雷思", explanation: "革者，变革也，卦象离火在上、兑泽在下，火泽相革、推陈出新，象征变革和创新。此卦主当下行业与生活皆有新的变化，不确定性背后藏着无限的希望与机会，事业上宜打破固有的思维模式，勇于创新、推陈出新，顺应行业的发展趋势，便能抓住新的机会，实现事业的突破。此时切勿因恐惧不确定性而墨守成规，大胆尝试、勇于变革，便能在不确定性中找到希望。", adviceAI: "换发型，尝试新饮品" },
+            { id: 25, name: "鼎卦", result: "中吉", sentence: "你生命的前半辈子或许属于别人，活在别人的认为里。那把后半辈子还给你自己，去追随你内在的声音。——荣格", explanation: "鼎者，鼎器也，卦象离火在上、巽风在下，风火相鼎、权威稳固，象征权威和稳定。此卦主当下事业上有一定的权威，地位稳固，生活也安稳幸福，但可能会被他人的看法所束缚，失去自我。此时坚守本心，把生活的主动权掌握在自己手中，追随自己内在的声音，不被他人的看法所左右，在保持权威与稳定的同时，做真实的自己，便能让事业更上一层楼，生活也能收获更多的快乐。", adviceAI: "戴木质饰，独处一小时" },
+            { id: 26, name: "家人卦", result: "中吉", sentence: "深厚的关系是幸福的最强预测因素。——罗伯特·瓦尔丁格《哈佛幸福课》", explanation: "家人者，家也，卦象离火在上、巽风在下，风火家人、和睦美满，象征家庭和亲情。此卦主当下家庭和睦，亲友之间互相关爱、互相扶持，无家庭矛盾，深厚的家庭关系能给你带来满满的幸福感与安全感，成为你事业发展的坚强后盾。事业上能因家庭的安稳而无后顾之忧，全身心投入工作，收获更好的成果，此时多陪伴家人，用心维系家庭关系，家庭的和睦会让整体气运稳中有升。", adviceAI: "做家常菜，和家人聊天" },
+            { id: 27, name: "丰卦", result: "中吉", sentence: "即使是幸福的生活也不可能没有一些黑暗，如果没有悲伤的平衡，“幸福”这个词就会失去意义。——荣格", explanation: "丰者，丰盛也，卦象离火在上、震雷在下，火雷相丰、繁荣昌盛，象征丰盛和繁荣。此卦主当下事业繁荣，财富丰厚，生活幸福，但偶尔会有小的烦恼出现，这正是幸福的调味剂。此时保持谦虚的态度，不骄不躁，懂得珍惜当下的幸福，坦然面对偶尔的小烦恼，便能让这份繁荣与幸福长久相伴，财运上宜合理规划，避免铺张浪费。", adviceAI: "戴黄水晶，吃橙子柿子" },
+            { id: 28, name: "中孚卦", result: "中吉", sentence: "人而无信，不知其可也。——《论语·为政》", explanation: "中孚者，诚信也，卦象兑泽在上、巽风在下，风泽相孚、诚信待人，象征诚信和信任。此卦主当下宜以真诚待人，信守承诺，便能收获他人的信任与认可，人际上无矛盾、无是非，事业上能因诚信而获得更多的合作机会，财运上也能因诚信而有稳定的进账，真诚是立身之本，保持诚信的本心，便能让事业与生活顺风顺水。", adviceAI: "戴白玉，说一句真诚的话" },
+            { id: 29, name: "既济卦", result: "中吉", sentence: "功成身退，天之道也。——《老子·九章》", explanation: "既济者，既成也，卦象离火在上、坎水在下，水火既济、功成名就，象征成功和完成。此卦主当下事业取得阶段性成功，目标顺利完成，财运上有相应的收获，人际上也能得到他人的祝贺与认可。但成功之后最忌懈怠，此时保持警惕，不骄不躁，及时规划下一步的目标，便能让事业持续发展，避免因懈怠而出现问题。", adviceAI: "做计划，吃莲子百合" },
+            { id: 30, name: "悦心卦", result: "中吉", sentence: "心随境转则烦，境随心转则悦。——《六祖坛经》引申", explanation: "悦心卦取心境愉悦、气运温和之意，卦象兑泽在上、坤地在下，泽地相和、心生喜乐。此卦主无大的波折，生活中满是小美好，人际相处和谐，工作推进顺利，虽无大的惊喜，但整体状态舒心自在。此时保持愉悦的心境，多做让自己开心的事，懂得享受生活的小美好，好的心境能滋养气运，让后续的运势持续上扬。", adviceAI: "听轻快音乐，吃香蕉菠萝" },
+            { id: 31, name: "屯卦", result: "次吉", sentence: "道阻且长，行则将至。——《荀子·修身》引申", explanation: "屯者，物之始生也，卦象中阴阳初交，生机虽有却尚显微弱，如同种子刚破土而出，需历经风雨才能扎根生长。此卦主当下处于事情的初始阶段，前路难免有迷茫与阻碍，事业或生活中会遇到诸多不确定的问题，看似步履维艰，实则是积累力量的必经之路。此时切不可急于求成，更不可因暂时的困难轻言放弃，需沉下心来规划方向，一点点积累经验、积蓄实力，耐心等待时机成熟，每一次的坚持，都是在为后续的柳暗花明铺路，坚持下去便会迎来转机。", adviceAI: "带桃木挂，做一件小事" },
+            { id: 32, name: "蒙卦", result: "次吉", sentence: "三人行，必有我师焉。——《论语·述而》", explanation: "蒙者，蒙昧也，卦象中阴爻掩阳，如同人处于懵懂迷茫的阶段，需得外界指引方能拨开迷雾。此卦主当下宜以空杯心态待人接物，无论是学业上的知识盲区、事业中的经验不足，还是生活里的处事困惑，皆能通过主动学习和虚心请教获得答案。身边会有良师益友出现，为你指点迷津，此时切勿自以为是、闭门造车，放下身段请教、用心学习，便能快速提升自身能力，突破认知局限，让运势从蒙昧走向明朗，学业有进、事业有悟。", adviceAI: "放钢笔，喝淡茶" },
+            { id: 33, name: "需卦", result: "次吉", sentence: "耐心是一切聪明才智的基础。——柏拉图", explanation: "需者，等待也，卦象中坎水在上、乾天在下，如同江河需汇聚百川方能入海，万事需静待时机方能成功。此卦主当下气运处于沉淀期，看似所求之事迟迟未有结果，实则是时机尚未成熟，强行推进只会适得其反，甚至引发不必要的麻烦。此时最宜沉心静气，顺应事物的发展规律，在等待中做好万全准备，梳理思路、积累自身实力，待时机一到，便能顺势而为、水到渠成，财运上宜守不宜攻，安稳等待便是最好的选择。", adviceAI: "摆清水，晚饭后慢走" },
+            { id: 34, name: "小畜卦", result: "次吉", sentence: "尺有所短，寸有所长。——《楚辞·卜居》", explanation: "小畜者，小有所畜也，卦象中巽风在上、乾天在下，如同微风聚势、细雨积塘，象征点滴积累、小有所成。此卦主当下事业有小成，财运有小进账，自身的优势在做事中得以充分展现，让你收获属于自己的成就感，前途一片光明。此时最忌因小有成就而沾沾自喜、骄傲自满，需继续发挥自身优势，脚踏实地努力，不断积累实力与财富，看似不起眼的点滴收获，终将汇聚成未来的大成功。", adviceAI: "记优势，吃坚果" },
+            { id: 35, name: "履卦", result: "次吉", sentence: "行胜于言。——清华大学校训", explanation: "履者，履行也，卦象中兑泽在上、乾天在下，如同人行走于泽边，需步步谨慎、脚踏实地方能平安前行。此卦主当下宜以行动立身，空谈无益，唯有脚踏实地的付出才能收获真正的成果，事业上需谨言慎行、遵守规则，说到做到，便能获得他人的信任与认可，让工作顺利推进。生活中言行一致，方能维系良好的人际关系，避免因言而无信引发矛盾，此时运势虽无大的起伏，但稳扎稳打、知行合一，便无差错。", adviceAI: "穿棕鞋，列简易清单" },
+            { id: 36, name: "豫卦", result: "次吉", sentence: "春有百花秋有月，夏有凉风冬有雪。——无门慧开《颂平常心是道》", explanation: "豫者，愉悦也，卦象中坤地在上、震雷在下，雷出地中、万物欢腾，象征心境愉悦、气运平和。此卦主当下心境顺遂，心中无烦恼、无焦虑，能以乐观的心态面对生活中的一切，事业上虽无大的突破，却能顺顺利利，无任何阻碍，人际上家庭和睦、朋友相伴，生活中充满小惊喜、小美好，幸福感满满。此时宜保持愉悦的心境，多做让自己开心的事，懂得享受生活，切勿过度焦虑、自寻烦恼，好的心境能滋养气运，吸引更多的好运到来。", adviceAI: "带糖果，吃甜品" },
+            { id: 37, name: "随卦", result: "次吉", sentence: "活在当下，珍惜眼前。——《金刚经》“应无所住而生其心”引申", explanation: "随者，随从也，卦象中震雷在上、兑泽在下，雷泽相和、顺势而为，象征顺应时势、跟随正确的方向。此卦主当下宜顺势而行，摒弃对未来的过度焦虑，专注于当下的每一个选择，做好眼前的每一件事，便能让未来的发展水到渠成。事业上顺应行业潮流、跟随正确的领导，便能少走弯路，生活中顺应本心的选择，便能收获简单的幸福，此时无需强求，顺势而为便是最好的处事方式，事业与生活皆能顺利推进。", adviceAI: "专注当下，吃时令水果" },
+            { id: 38, name: "复卦", result: "次吉", sentence: "你抗拒的东西会持续存在，你正视的东西会逐渐转化。——荣格", explanation: "复者，回复也，卦象中震雷在上、坤地在下，雷归地中、生机复现，象征恢复和生机，主气运开始反转。此卦主当下摆脱过往的低谷，运势开始慢慢回升，事业上开始恢复活力，之前的困境逐渐得到缓解，生活中也开始出现新的生机。此时宜正视过往的问题与困境，摒弃抗拒的心态，主动做出改变，积极行动、重新开始，便能让事业与生活快速恢复，甚至比以往发展得更好，抓住这个恢复的契机，便能让气运一路走高。", adviceAI: "正视问题，晨跑十分钟" },
+            { id: 39, name: "无妄卦", result: "次吉", sentence: "知者不惑，仁者不忧，勇者不惧。——《论语·子罕》", explanation: "无妄者，无虚妄也，卦象中乾天在上、震雷在下，天雷无妄、真诚正直，象征真实和正直，脚踏实地方为正道。此卦主当下宜摒弃虚妄的想法，放下过往的成败得失，专注于当下的选择，以真诚正直的态度做人做事，便能收获成功。事业上脚踏实地、认真做事，不投机取巧，便能得到上级与同事的认可，收获应有的成果，生活中真诚待人，便能收获真挚的感情与人际关系，真实与正直，便是当下最珍贵的品质，能让气运稳中有升。", adviceAI: "做真诚的事，吃清淡餐" },
+            { id: 40, name: "大畜卦", result: "次吉", sentence: "我们常常高估一次性改变的难度，低估每天微小改变的累积力量。——詹姆斯·克利尔《原子习惯》", explanation: "大畜者，大有所畜也，卦象中艮山在上、乾天在下，天山相蓄、厚积薄发，象征积蓄力量、方成大器。此卦主当下宜沉下心来积累实力，摒弃急于求成的心态，注重每天的微小改变与积累，无论是事业上的专业能力，还是财运上的财富积累，都能在点滴中不断提升。此时事业上虽无大的突破，却在为后续的爆发蓄力，只要坚持每天进步一点点，厚积薄发，便能在未来收获意想不到的成功，大有所蓄，方能大有所成。", adviceAI: "每日学一技，存十元钱" },
+            { id: 41, name: "颐卦", result: "次吉", sentence: "知足是天然的财富，欲望是人为的贫穷。——苏格拉底", explanation: "颐者，养也，卦象中艮山在上、震雷在下，山雷相养、修身养性，象征养生和培养，注重修养与知足。此卦主当下宜修身养性，培养自身的品德与心性，摒弃过度的欲望，学会知足，便能收获内心的平静与幸福。事业上做好分内之事，不贪多求快，便能稳步前行，财运上知足常乐，不盲目追求偏财，便能守住现有的财富，生活中注重身体健康与心灵滋养，便能收获身心安康，知足常乐，便是当下最好的生活状态，也能让气运平稳无波。", adviceAI: "修身养性，吃素食一餐" },
+            { id: 42, name: "贲卦", result: "次吉", sentence: "生命不是等待暴风雨过去，而是学会在雨中跳舞。——露西·莫德·蒙哥马利《绿山墙的安妮》", explanation: "贲者，文饰也，卦象中离火在上、艮山在下，火山水秀、文饰相宜，象征修饰和美化，却忌过度。此卦主当下宜适度修饰自身，无论是外在的形象管理，还是内在的修养提升，适度的改变都能让你提升个人价值与形象，吸引更多的好运。事业上适度包装自己的成果，能让上级与客户更认可，生活中适度提升自己，能收获更好的人际关系，但切勿过度修饰、华而不实，保持本真，在困境中也能保持乐观，便是最好的状态。", adviceAI: "适度打扮，插一束花" }
         ];
 
-        // 旋转木马图片路径
+        // 心灵卡背景图片路径
         const carouselImages = [
-            'horse1.png',
-            'horse2.png',
-            'horse3.png',
-            'horse4.png'
+            'a1.JPG',
+            'a2.JPG',
+            'a3.JPG',
+            'a4.JPG',
+            'a5.JPG',
+            'a6.JPG',
+            'a7.JPG',
+            'a8.JPG'
         ];
 
         // 生成马年专属心灵卡
         function generateFortuneCard() {
-            // 获取当前卦象的名称
-            const name = getQueryParam('name');
-            
-            // 查找对应的卦象数据，获取sentence
-            let sentence = "";
-            for (const hexagram of hexagrams) {
-                if (hexagram.name === name) {
-                    sentence = hexagram.sentence;
-                    break;
-                }
-            }
+            // 直接从URL参数中获取数据
+            const sentence = getQueryParam('sentence');
+            const result = getQueryParam('result');
             
             if (!sentence) {
                 alert('无法获取心灵卡内容，请重新抽签');
@@ -255,9 +249,16 @@
             const canvas = document.getElementById('fortune-card');
             const ctx = canvas.getContext('2d');
             
-            // 重置canvas尺寸
+            // 重置canvas尺寸为预览大小
             canvas.width = 230;
             canvas.height = 320;
+            
+            // 保存原始图片信息，用于后续保存时使用
+            window.fortuneCardData = {
+                backgroundImage: backgroundImage,
+                sentence: sentence,
+                result: result
+            };
             
             // 加载背景图片
             const img = new Image();
@@ -304,18 +305,31 @@
                 );
                 
                 // 设置文字样式
-                ctx.font = '16px "STKaiti", "KaiTi", serif';
-                ctx.fillStyle = '#ffffff';
-                ctx.textAlign = 'center';
+                ctx.fillStyle = '#FEF2DC';
+                ctx.textAlign = 'left';
                 ctx.textBaseline = 'top';
                 ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
                 ctx.shadowBlur = 3;
                 ctx.shadowOffsetX = 1;
                 ctx.shadowOffsetY = 1;
                 
+                // 获取当前卦象的名称
+                const name = getQueryParam('name');
+                
+                // 绘制卦象名称（最大字体）
+                ctx.font = 'bold 26px "STKaiti", "KaiTi", serif';
+                ctx.fillText(name, 20, 20);
+                
+                // 绘制结果（小2号字体）
+                ctx.font = '16px "STKaiti", "KaiTi", serif';
+                ctx.fillText(result, 20, 65);
+                
+                // 绘制句子（最小字体）
+                ctx.font = '12px "STKaiti", "KaiTi", serif';
+                
                 // 文字换行处理
                 const maxWidth = canvas.width - 40; // 两边各留20px边距
-                const lineHeight = 25; // 行高
+                const lineHeight = 18; // 行高
                 const lines = [];
                 let currentLine = "";
                 
@@ -335,11 +349,11 @@
                 lines.push(currentLine);
                 
                 // 计算文字起始位置
-                const startY = 20; // 顶部20px margin
+                const startY = 95; // 顶部95px margin（预留名称和结果的空间）
                 
                 // 绘制文字
                 lines.forEach((line, index) => {
-                    ctx.fillText(line, canvas.width / 2, startY + index * lineHeight);
+                    ctx.fillText(line, 20, startY + index * lineHeight);
                 });
                 
                 // 显示预览容器
@@ -349,7 +363,9 @@
                 // 隐藏抽签结果相关内容
                 document.querySelector('.result-container h1').style.display = 'none';
                 document.getElementById('hexagram-name').style.display = 'none';
+                document.getElementById('hexagram-result').style.display = 'none';
                 document.getElementById('hexagram-explanation').style.display = 'none';
+                document.getElementById('hexagram-advice').style.display = 'none';
             };
             
             img.onerror = function() {
@@ -359,19 +375,109 @@
 
         // 保存心灵卡
         function saveFortuneCard() {
-            const canvas = document.getElementById('fortune-card');
+            // 创建临时canvas用于生成真实大小的图片
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
             
-            // 将canvas转换为图片
-            canvas.toBlob(function(blob) {
-                // 创建下载链接
-                const link = document.createElement('a');
-                link.download = '马年心灵卡.png';
-                link.href = URL.createObjectURL(blob);
-                link.click();
+            // 获取保存的数据
+            const { backgroundImage, sentence, result } = window.fortuneCardData;
+            
+            // 加载背景图片
+            const img = new Image();
+            img.crossOrigin = 'Anonymous'; // 允许跨域加载
+            img.src = backgroundImage;
+            
+            img.onload = function() {
+                // 设置canvas为图片的真实大小（保持比例）
+                const imgWidth = img.width;
+                const imgHeight = img.height;
                 
-                // 提示用户保存并转发
-                alert('心灵卡已保存，请分享给好友，传递马年好运！');
-            });
+                // 裁剪掉图片底部的1/10
+                const keptHeight = imgHeight * 0.9;
+                
+                // 设置临时canvas尺寸为裁剪后的真实大小
+                tempCanvas.width = imgWidth;
+                tempCanvas.height = keptHeight;
+                
+                // 绘制背景图片（不压缩）
+                tempCtx.drawImage(
+                    img, 
+                    0, 0, imgWidth, keptHeight, // 源图像裁剪区域
+                    0, 0, imgWidth, keptHeight // 目标画布真实大小
+                );
+                
+                // 设置文字样式（根据真实大小调整字体大小）
+                const baseFontSize = 12;
+                const scaleFactor = imgWidth / 230; // 计算缩放因子
+                const fontSize = baseFontSize * scaleFactor;
+                const lineHeight = 18 * scaleFactor;
+                
+                tempCtx.fillStyle = '#FEF2DC';
+                tempCtx.textAlign = 'left';
+                tempCtx.textBaseline = 'top';
+                tempCtx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+                tempCtx.shadowBlur = 3;
+                tempCtx.shadowOffsetX = 1;
+                tempCtx.shadowOffsetY = 1;
+                
+                // 获取当前卦象的名称
+                const name = getQueryParam('name');
+                
+                // 绘制卦象名称（最大字体）
+                tempCtx.font = `bold ${fontSize * 2.17}px "STKaiti", "KaiTi", serif`;
+                tempCtx.fillText(name, 20 * scaleFactor, 20 * scaleFactor);
+                
+                // 绘制结果（小2号字体）
+                tempCtx.font = `${fontSize * 1.33}px "STKaiti", "KaiTi", serif`;
+                tempCtx.fillText(result, 20 * scaleFactor, 65 * scaleFactor);
+                
+                // 绘制句子（最小字体）
+                tempCtx.font = `${fontSize}px "STKaiti", "KaiTi", serif`;
+                
+                // 文字换行处理
+                const maxWidth = tempCanvas.width - 40 * scaleFactor; // 两边各留边距
+                const lines = [];
+                let currentLine = "";
+                
+                // 分割文字为多行
+                const chars = sentence.split('');
+                for (const char of chars) {
+                    const testLine = currentLine + char;
+                    const metrics = tempCtx.measureText(testLine);
+                    
+                    if (metrics.width > maxWidth && currentLine) {
+                        lines.push(currentLine);
+                        currentLine = char;
+                    } else {
+                        currentLine = testLine;
+                    }
+                }
+                lines.push(currentLine);
+                
+                // 计算文字起始位置
+                const startY = 95 * scaleFactor; // 顶部margin（预留名称和结果的空间）
+                
+                // 绘制文字
+                lines.forEach((line, index) => {
+                    tempCtx.fillText(line, 20 * scaleFactor, startY + index * lineHeight);
+                });
+                
+                // 将临时canvas转换为图片
+                tempCanvas.toBlob(function(blob) {
+                    // 创建下载链接
+                    const link = document.createElement('a');
+                    link.download = '马年心灵卡.png';
+                    link.href = URL.createObjectURL(blob);
+                    link.click();
+                    
+                    // 提示用户保存并转发
+                    alert('心灵卡已保存，请分享给好友，传递马年好运！');
+                });
+            };
+            
+            img.onerror = function() {
+                alert('无法加载背景图片，请稍后重试');
+            };
         }
 
         // 显示抽签结果并创建雪花
@@ -402,9 +508,24 @@
             const name = getQueryParam('name');
             const explanation = getQueryParam('explanation');
             
+            // 查找对应的卦象数据，获取result和adviceAI
+            let result = "";
+            let adviceAI = "";
+            for (const hexagram of hexagrams) {
+                if (hexagram.name === name) {
+                    result = hexagram.result;
+                    adviceAI = hexagram.adviceAI;
+                    break;
+                }
+            }
+            
             if (name && explanation) {
                 document.getElementById('hexagram-name').textContent = name;
+                document.getElementById('hexagram-result').textContent = `${result}`;
                 document.getElementById('hexagram-explanation').textContent = explanation;
+                if (adviceAI) {
+                    document.getElementById('hexagram-advice').textContent = `建议：${adviceAI}`;
+                }
             }
         };
     </script>
