@@ -135,6 +135,98 @@ function resetDraw() {
 
 // 事件监听
 drawBtn.addEventListener('click', () => {
+    // 检查是否可以抽签（每60分钟一次）
+    const lastDrawTime = localStorage.getItem('lastDrawTime');
+    const currentTime = Date.now();
+    const sixtyMinutes = 60 * 60 * 1000;
+    
+    if (lastDrawTime) {
+        const timeDiff = currentTime - parseInt(lastDrawTime);
+        if (timeDiff < sixtyMinutes) {
+            // 计算剩余时间
+            const remainingTime = sixtyMinutes - timeDiff;
+            const minutes = Math.floor(remainingTime / (60 * 1000));
+            const seconds = Math.floor((remainingTime % (60 * 1000)) / 1000);
+            
+            // 显示倒计时弹窗
+            const countdownModal = document.createElement('div');
+            countdownModal.style.position = 'fixed';
+            countdownModal.style.top = '0';
+            countdownModal.style.left = '0';
+            countdownModal.style.width = '100%';
+            countdownModal.style.height = '100%';
+            countdownModal.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            countdownModal.style.display = 'flex';
+            countdownModal.style.justifyContent = 'center';
+            countdownModal.style.alignItems = 'center';
+            countdownModal.style.zIndex = '1000';
+            
+            const countdownContent = document.createElement('div');
+            countdownContent.style.backgroundColor = 'white';
+            countdownContent.style.padding = '30px';
+            countdownContent.style.borderRadius = '10px';
+            countdownContent.style.textAlign = 'center';
+            countdownContent.style.width = '80%';
+            countdownContent.style.maxWidth = '500px';
+            
+            const countdownText = document.createElement('p');
+            countdownText.style.fontSize = '18px';
+            countdownText.style.lineHeight = '1.5';
+            countdownText.style.marginBottom = '30px';
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = '关闭';
+            closeBtn.style.padding = '10px 30px';
+            closeBtn.style.fontSize = '16px';
+            closeBtn.style.backgroundColor = '#B1BEF2';
+            closeBtn.style.color = 'white';
+            closeBtn.style.border = 'none';
+            closeBtn.style.borderRadius = '5px';
+            closeBtn.style.cursor = 'pointer';
+            
+            countdownContent.appendChild(countdownText);
+            countdownContent.appendChild(closeBtn);
+            countdownModal.appendChild(countdownContent);
+            document.body.appendChild(countdownModal);
+            
+            // 更新倒计时
+            const updateCountdown = () => {
+                const currentTime = Date.now();
+                const timeDiff = currentTime - parseInt(lastDrawTime);
+                const remainingTime = sixtyMinutes - timeDiff;
+                
+                if (remainingTime <= 0) {
+                    // 倒计时结束，允许抽签
+                    clearInterval(timer);
+                    document.body.removeChild(countdownModal);
+                    // 自动触发抽签
+                    drawBtn.click();
+                    return;
+                }
+                
+                const minutes = Math.floor(remainingTime / (60 * 1000));
+                const seconds = Math.floor((remainingTime % (60 * 1000)) / 1000);
+                countdownText.textContent = `请稍后再试，距离下次抽签还有 ${minutes} 分 ${seconds} 秒`;
+            };
+            
+            // 每秒更新一次倒计时
+            const timer = setInterval(updateCountdown, 1000);
+            
+            // 初始化显示
+            updateCountdown();
+            
+            closeBtn.addEventListener('click', () => {
+                clearInterval(timer);
+                document.body.removeChild(countdownModal);
+            });
+            
+            return; // 阻止抽签
+        }
+    }
+    
+    // 记录本次抽签时间
+    localStorage.setItem('lastDrawTime', currentTime.toString());
+    
     // 开始旋转
     drawBtn.disabled = true;
     drawBtn.textContent = '抽签中...';
