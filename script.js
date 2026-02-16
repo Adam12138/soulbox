@@ -1,4 +1,4 @@
-// 卦象数据
+// 六十四卦数据
 const hexagrams = [
     
 
@@ -242,26 +242,26 @@ const carouselImages = [
 // 初始化旋转木马
 function initCarousel() {
     const itemCount = 12; // 旋转木马上的项目数量
-    const radius = 150; // 旋转木马半径，适当增大以容纳更大的图片
+    const radius = 135; // 旋转木马半径，缩小为原来的0.9倍
     
     for (let i = 0; i < itemCount; i++) {
         const angle = (i / itemCount) * Math.PI * 2;
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
         
-        // 后面的图片高出前面的图片100个像素
+        // 后面的图片高出前面的图片90个像素（缩小为原来的0.9倍）
         // z值越小（后面），y值越小（越高）
-        // 当z = -radius（最后面）时，y = -50（最高）
-        // 当z = radius（最前面）时，y = 50（最低）
-        const y = (100 * z) / (2 * radius);
+        // 当z = -radius（最后面）时，y = -45（最高）
+        // 当z = radius（最前面）时，y = 45（最低）
+        const y = (90 * z) / (2 * radius);
         
         const item = document.createElement('div');
         item.className = 'carousel-item';
         item.style.position = 'absolute';
-        item.style.left = `calc(50% - 45px)`; // 调整为新的大小
-        item.style.top = `calc(50% - 45px)`; // 调整为新的大小
-        item.style.width = '90px'; // 调大1.5倍
-        item.style.height = '90px'; // 调大1.5倍
+        item.style.left = `calc(50% - 40.5px)`; // 调整为新的大小（45px * 0.9）
+        item.style.top = `calc(50% - 40.5px)`; // 调整为新的大小（45px * 0.9）
+        item.style.width = '81px'; // 缩小为原来的0.9倍（90px * 0.9）
+        item.style.height = '81px'; // 缩小为原来的0.9倍（90px * 0.9）
         item.style.transform = `translateX(${x}px) translateY(${y}px) translateZ(${z}px)`;
         item.style.zIndex = Math.floor(z + radius); // 根据z轴位置设置层级
         item.style.transition = 'transform 0.05s ease-out'; // 设置平滑过渡
@@ -269,8 +269,8 @@ function initCarousel() {
         // 创建图片元素
         const img = document.createElement('img');
         img.src = carouselImages[i % carouselImages.length];
-        img.style.width = '75px !important'; // 调大1.5倍（50px * 1.5），添加!important提高优先级
-        img.style.height = '75px !important'; // 调大1.5倍（50px * 1.5），添加!important提高优先级
+        img.style.width = '67.5px !important'; // 缩小为原来的0.9倍（75px * 0.9），添加!important提高优先级
+        img.style.height = '67.5px !important'; // 缩小为原来的0.9倍（75px * 0.9），添加!important提高优先级
         img.style.borderRadius = '50%';
         img.style.objectFit = 'cover';
         img.style.display = 'block';
@@ -390,7 +390,7 @@ drawBtn.addEventListener('click', () => {
     // 获取所有图片元素
     const items = carousel.querySelectorAll('.carousel-item');
     const itemCount = items.length;
-    const radius = 150; // 统一使用与初始化相同的半径
+    const radius = 135; // 统一使用与初始化相同的半径（缩小为原来的0.9倍）
 
     // 3秒转两圈，更流畅的动画
     const totalSteps = 96; // 增加步骤数量，使动画更流畅
