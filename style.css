@@ -40,7 +40,7 @@ body {
 /* 结果页面标题样式 */
 #hexagram-name {
     font-size: 28px;
-    color: #333;
+    color: #FEF2DC;
     margin-bottom: 20px;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
     font-weight: bold;
@@ -48,15 +48,15 @@ body {
 
 /* 背景图片旋转木马容器 */
 .carousel-container {
-    width: 400px;
-    height: 400px;
+    width: 360px;
+    height: 360px;
     margin-bottom: 40px;
     position: relative;
     perspective: 1000px;
     overflow: visible;
     /* 背景颜色效果 */
     background: #FEF2DC;
-    border-radius: 25px;
+    border-radius: 22.5px;
     /* 增强阴影效果 */
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1);
 }
@@ -71,8 +71,8 @@ body {
 /* 玻璃拟态图片项 */
 .carousel-item {
     position: absolute;
-    width: 90px;
-    height: 90px;
+    width: 81px;
+    height: 81px;
     background: transparent;
     border-radius: 50%;
     display: flex;
@@ -93,8 +93,8 @@ body {
 .carousel-item img {
     width: 100%;
     height: 100%;
-    max-width: 75px;
-    max-height: 75px;
+    max-width: 67.5px;
+    max-height: 67.5px;
     border-radius: 50%;
     object-fit: cover;
     border: none;
